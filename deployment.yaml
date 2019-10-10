@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iot-sense
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iot-sense
+  template:
+    metadata:
+      labels:
+        app: iot-sense
+    spec:
+      containers:
+        - name: iot-sense
+          image: tekn0ir/iot-sense-pod:latest
+          imagePullPolicy: Always
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - mountPath: /dev/i2c-1
+              name: i2c-device
+      volumes:
+        - name: i2c-device
+          hostPath:
+            # directory location on host
+            path: /dev/i2c-1
+            type: CharDevice
+
