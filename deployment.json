@@ -1,49 +1,86 @@
-{
-  "apiVersion": "apps/v1",
-  "kind": "Deployment",
-  "metadata": {
-    "name": "iot-sense"
-  },
-  "spec": {
-    "replicas": 1,
-    "selector": {
-      "matchLabels": {
-        "app": "iot-sense"
-      }
+[
+  {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+      "name": "nginx-deployment"
     },
-    "template": {
-      "metadata": {
-        "labels": {
+    "spec": {
+      "replicas": 1,
+      "selector": {
+        "matchLabels": {
+          "app": "nginx"
+        }
+      },
+      "template": {
+        "metadata": {
+          "labels": {
+            "app": "nginx"
+          }
+        },
+        "spec": {
+          "containers": [
+            {
+              "name": "nginx",
+              "image": "nginx:latest",
+              "ports": [
+                {
+                  "containerPort": 80
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+      "name": "iot-sense"
+    },
+    "spec": {
+      "replicas": 1,
+      "selector": {
+        "matchLabels": {
           "app": "iot-sense"
         }
       },
-      "spec": {
-        "containers": [
-          {
-            "name": "iot-sense",
-            "image": "tekn0ir/iot-sense-pod:latest",
-            "imagePullPolicy": "Always",
-            "securityContext": {
-              "privileged": true
-            },
-            "volumeMounts": [
-              {
-                "mountPath": "/dev/i2c-1",
-                "name": "i2c-device"
-              }
-            ]
+      "template": {
+        "metadata": {
+          "labels": {
+            "app": "iot-sense"
           }
-        ],
-        "volumes": [
-          {
-            "name": "i2c-device",
-            "hostPath": {
-              "path": "/dev/i2c-1",
-              "type": "CharDevice"
+        },
+        "spec": {
+          "containers": [
+            {
+              "name": "iot-sense",
+              "image": "tekn0ir/iot-sense-pod:latest",
+              "imagePullPolicy": "Always",
+              "securityContext": {
+                "privileged": true
+              },
+              "volumeMounts": [
+                {
+                  "mountPath": "/dev/i2c-1",
+                  "name": "i2c-device"
+                }
+              ]
             }
-          }
-        ]
+          ],
+          "volumes": [
+            {
+              "name": "i2c-device",
+              "hostPath": {
+                "path": "/dev/i2c-1",
+                "type": "CharDevice"
+              }
+            }
+          ]
+        }
       }
     }
   }
-}
+]

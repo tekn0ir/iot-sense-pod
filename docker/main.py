@@ -10,7 +10,7 @@ import os
 import logging
 import sys
 
-logger = logging.getLogger('iot-sense-pod')
+logger = logging.getLogger('iot-sense')
 ch = logging.StreamHandler(sys.stdout)
 ch.setLevel(logging.INFO)
 formatter = logging.Formatter('[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s')
@@ -25,7 +25,7 @@ logger.info("TΞꓘN01R")
 
 message = os.getenv("IOT_SENSE_MSG", "TEKNOIR")
 color = (255, 0, 35) # RED
-client = mqtt.Client("iot-sense-pod") # no real need to use a fixed client id here, unless you're using it for authentication or have clean_session set to False.
+client = mqtt.Client("iot-sense")
 
 sense = SenseHat()
 sense.set_rotation(180)
@@ -64,7 +64,7 @@ client.on_connect = on_connect
 client.on_message = on_message
 
 client.connect(os.getenv("HMQ_SERVICE_HOST", "hmq.kube-system"), os.getenv("HMQ_SERVICE_PORT", 1883))
-client.subscribe("toe/commands/iot-sense-pod/#", qos=1)
+client.subscribe("toe/commands/iot-sense/#", qos=1)
 client.loop_start()  # This runs the network code in a background thread and also handles reconnecting for you.
 
 tl = Timeloop()
